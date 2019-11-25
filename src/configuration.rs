@@ -1,4 +1,5 @@
 
+//configuration data used to set immutable prob properties
 pub struct Configuration {
     pub max_prob: i64,
     pub min_prob: i64,
@@ -11,7 +12,6 @@ pub struct Configuration {
 }
 
 impl Configuration {
-    /// Creates a new game board.
     pub fn new() -> Configuration {
         Configuration {
             max_prob: 1000000000,
