@@ -1,7 +1,7 @@
 
 pub use crate::globalstate::GlobalState;
 
-//configuration data used to set immutable prob properties
+//a single instruction to be executed with the global state
 pub struct Instruction {
     pub call: Box<dyn Fn(&mut GlobalState) -> ()>,
 }
