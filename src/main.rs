@@ -32,15 +32,11 @@ fn parse_file(file: String) -> Option<String> {
     Some(content)
 }
 
-
-struct State {
-    regs: Vec<char>
-}
-
-struct Instr(Box<dyn Fn(&mut State) -> ()>);
-
 fn int_cur_index(state: &mut globalstate::GlobalState) {
     state.data[state.current_index] = std::char::from_u32(state.data[state.current_index] as u32 + 1).unwrap_or(state.data[state.current_index]);
+}
+fn dec_cur_index(state: &mut globalstate::GlobalState) {
+    state.data[state.current_index] = std::char::from_u32(state.data[state.current_index] as u32 - 1).unwrap_or(state.data[state.current_index]);
 }
 
 fn main() {
@@ -48,9 +44,12 @@ fn main() {
     // let config = configuration::Configuration::new();
     let mut global_state = globalstate::GlobalState::new();
     let mut i1 = instructions::Instruction::new(Box::new(int_cur_index));
+    let mut i2 = instructions::Instruction::new(Box::new(dec_cur_index));
 
     println!("{}", global_state.data[0]);
     i1.call_fn(&mut global_state);
+    println!("{}", global_state.data[0]);
+    i2.call_fn(&mut global_state);
     println!("{}", global_state.data[0]);
 
     // match scriptdata {
