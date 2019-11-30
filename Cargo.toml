@@ -5,3 +5,5 @@ authors = ["corylamontagne <corylamontagne@yahoo.com>"]
 edition = "2018"
 
 [dependencies]
+maplit = "1.0.2"
+rand = "0.3"

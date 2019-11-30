@@ -13,8 +13,8 @@ impl Instruction {
         }
     }
 
-    pub fn call_fn(&mut self, state: &mut GlobalState) {
-        (self.call)(state);
+    pub fn call_fn(&self, state: &mut GlobalState) {
+        (&self.call)(state);
     }
 }
 
