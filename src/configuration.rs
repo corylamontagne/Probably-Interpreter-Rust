@@ -1,5 +1,6 @@
 
 //configuration data used to set immutable prob properties
+#[derive(Clone)]
 pub struct Configuration {
     pub max_prob: i64,
     pub min_prob: i64,

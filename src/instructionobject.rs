@@ -1,4 +1,5 @@
 
+use std::rc::Rc; 
 pub use crate::globalstate::GlobalState;
 pub use crate::instructions::Instruction;
 pub use crate::configuration::Configuration;
@@ -6,7 +7,7 @@ pub use crate::configuration::Configuration;
 
 //an instruction object which contains all protential instructions for a given function and their rate of occurance
 pub struct InstructionObject {
-    pub probable_ops: Vec::<(i64, Instruction)>,
+    pub probable_ops: Vec::<(i64, Rc::<Instruction>)>,
     pub configuration: Configuration,
 }
 
@@ -14,9 +15,9 @@ fn nop(state: &mut GlobalState) {
     }
 
 impl InstructionObject {
-    pub fn new(config: Configuration, operation: (i64, Instruction), inverse: (i64, Instruction)) -> InstructionObject {
+    pub fn new(config: Configuration, operation: (i64, Rc::<Instruction>), inverse: (i64, Rc::<Instruction>)) -> InstructionObject {
         InstructionObject {
-            probable_ops: vec![(operation.0, operation.1), (inverse.0, inverse.1), (0, Instruction::new(Box::new(nop)))],
+            probable_ops: vec![(operation.0, operation.1), (inverse.0, inverse.1), (0, Rc::new(Instruction::new(Box::new(nop))))],
             configuration: config,
         }
     }
