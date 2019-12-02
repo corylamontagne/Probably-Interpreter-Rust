@@ -1,5 +1,5 @@
 # Probably-Interpreter-Rust
-Interpreter for the Probably Esolong done in Rust
+Interpreter for the Probably Esolang done in Rust
 
 
 Eventually this will be the rust implementation of the Probably interpreter. 
