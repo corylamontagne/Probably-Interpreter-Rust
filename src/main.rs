@@ -69,39 +69,35 @@ fn build_lookup_table(lookup: &mut LookupTable, config: &Configuration) {
     let min_prob = config.min_prob;
     let high_end_probability = config.max_prob - (min_prob + config.nop_prob);
     
-    //TODO: Add instruction to the lookup table
     lookup.add_instruction(('i', InstructionObject::new(config.clone(), (high_end_probability, Rc::clone(&increment)), (min_prob, Rc::clone(&decrement)))));
     lookup.add_instruction(('d', InstructionObject::new(config.clone(), (high_end_probability, Rc::clone(&decrement)), (min_prob, Rc::clone(&increment)))));
 }
 
 fn main() {
-    // let scriptdata = parse_file(env::args().nth(1).expect("No script given"));
+    //let scriptdata = parse_file(env::args().nth(1).expect("No script given"));
     let config = configuration::Configuration::new();
     let mut global_state = globalstate::GlobalState::new();
     let mut lookup_table = lookuptable::LookupTable::new();
+    build_lookup_table(&mut lookup_table, &config);
 
-    let mut cli1 = |state: &mut GlobalState| {state.data[state.current_index] = std::char::from_u32(state.data[state.current_index] as u32 + 1).unwrap_or(0 as char)};
-    let mut decrement = function_object!(|state: &mut GlobalState| {state.data[state.current_index] = std::char::from_u32(state.data[state.current_index] as u32 - 1).unwrap_or(0 as char)});
-
-    let mut i1 = instructions::Instruction::new(Box::new(cli1));
-
-    let inst_ibj = instructionobject::InstructionObject::new(config, (100, Rc::new(i1)), (10, decrement));
-
-
-    //TODO: Why does the global state not change here? I think I hosed the probability checks in the instructino object.
-    println!("{}", global_state.data[0]); //A
-    inst_ibj.call_fn(&mut global_state, 125, 0, 1.0); //inc -> B
-    println!("{}", global_state.data[0]); //B
-    inst_ibj.call_fn(&mut global_state, 9, 0, 1.0); // NOP -> B
-    println!("{}", global_state.data[0]);//B
-    inst_ibj.call_fn(&mut global_state, 12, 0, 1.0); //dec -> A
-    println!("{}", global_state.data[0]);//A
-    inst_ibj.call_fn(&mut global_state, 125, 0, 1.0); //inc -> B
-    inst_ibj.call_fn(&mut global_state, 125, 0, 1.0); //inc -> C
-    println!("{}", global_state.data[0]);//C
-
-    // match scriptdata {
-    //     Some(x) => println!("Contents: {}", x),
-    //     None    => println!("No contents or script failed"),
-    // }
+    let mut op = lookup_table.fetch_instruction('i');
+    match op {
+        Some(x) => 
+        {     
+            println!("{}", global_state.data[0]); //A
+            x.call_fn(&mut global_state, 125, 0, 1.0); //inc -> B
+            println!("{}", global_state.data[0]); //B
+            x.call_fn(&mut global_state, 9, 0, 1.0); // NOP -> B
+            println!("{}", global_state.data[0]);//B
+            x.call_fn(&mut global_state, 12, 0, 1.0); //dec -> A
+            println!("{}", global_state.data[0]);//A
+            x.call_fn(&mut global_state, 125, 0, 1.0); //inc -> B
+            x.call_fn(&mut global_state, 125, 0, 1.0); //inc -> C
+            println!("{}", global_state.data[0]);//C
+        }
+        None => 
+        {
+            println!("Error!");
+        }
+    }
 }

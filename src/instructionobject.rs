@@ -29,7 +29,7 @@ impl InstructionObject {
 
         for (chance, op) in &self.probable_ops {
             if final_probability >= *chance {
-                (op).call_fn(state);
+                (op).as_ref().call_fn(state);
                 execution_probability = (*chance as f64) / (self.configuration.max_prob as f64);
                 return execution_probability;
             }
